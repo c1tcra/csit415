@@ -56,7 +56,6 @@ if (isset($_POST['submit'])) {
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <!-- this is the main page -->
     <div class="container">
         <h1>Customer Relationship Management</h1>
         <form action="index.php" method="post">
