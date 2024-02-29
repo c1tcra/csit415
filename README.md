@@ -26,3 +26,8 @@ admins/devs. serves similar as areg. take a look at them and their
 source code. 
 
 i think we should stick to dark theme websites.
+
+------
+2/29 push
+customerdetails is what admin panel will see. its not working to par as of yet
+so dont freak out. i dont have time for debugging at the moment.
