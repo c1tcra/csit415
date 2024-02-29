@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 27, 2024 at 08:55 PM
+-- Generation Time: Feb 28, 2024 at 06:06 PM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.2.0
 
@@ -28,19 +28,17 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `admin` (
-  `salesuser` text NOT NULL,
-  `salespass` int(11) NOT NULL,
   `adminuser` text NOT NULL,
-  `adminpass` varchar(255) DEFAULT NULL
+  `adminpass` varchar(255) DEFAULT NULL,
+  `adminname` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `admin`
 --
 
-INSERT INTO `admin` (`salesuser`, `salespass`, `adminuser`, `adminpass`) VALUES
-('0', 0, '0', '$2y$10$uss2JBlCrlBujMwK0zp.oOaixOvAGZP3ZKr2BLkJwXiP/wt1.pZ8u'),
-('', 0, 'admin', '$2y$10$UpWdFV5zGWgpg65nlIWwQeJkzUPdMcqBoHyD8YxiaMoI7u5YEeYm2');
+INSERT INTO `admin` (`adminuser`, `adminpass`, `adminname`) VALUES
+('admin', '$2y$10$suiOu5k7S6A6OnMNoAfV9OjyCAFizxTUVC1iEB.GzM6fRiHiA8w4W', 'admin');
 
 -- --------------------------------------------------------
 
@@ -70,8 +68,36 @@ CREATE TABLE `customer` (
   `lastName` text NOT NULL,
   `address` text NOT NULL,
   `phone` int(11) NOT NULL,
-  `email` text NOT NULL
+  `email` text NOT NULL,
+  `sid` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `customer`
+--
+
+INSERT INTO `customer` (`id`, `user`, `pass`, `firstName`, `lastName`, `address`, `phone`, `email`, `sid`) VALUES
+(1, 'amorgan', NULL, 'Arthur', 'Morgan', '308 Negra Arroyo', 2147483647, 'amorgan@vanderlinde.rdr', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sales`
+--
+
+CREATE TABLE `sales` (
+  `id` int(11) NOT NULL,
+  `salesname` text NOT NULL,
+  `position` text NOT NULL,
+  `totalCarSold` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `sales`
+--
+
+INSERT INTO `sales` (`id`, `salesname`, `position`, `totalCarSold`) VALUES
+(1, 'John Marston', 'Sales Manager', 88);
 
 -- --------------------------------------------------------
 
@@ -123,6 +149,13 @@ ALTER TABLE `car`
 -- Indexes for table `customer`
 --
 ALTER TABLE `customer`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fksid` (`sid`);
+
+--
+-- Indexes for table `sales`
+--
+ALTER TABLE `sales`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -153,7 +186,13 @@ ALTER TABLE `car`
 -- AUTO_INCREMENT for table `customer`
 --
 ALTER TABLE `customer`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `sales`
+--
+ALTER TABLE `sales`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `service`
@@ -176,6 +215,12 @@ ALTER TABLE `term`
 --
 ALTER TABLE `car`
   ADD CONSTRAINT `fkck` FOREIGN KEY (`cid`) REFERENCES `customer` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `customer`
+--
+ALTER TABLE `customer`
+  ADD CONSTRAINT `fksid` FOREIGN KEY (`sid`) REFERENCES `sales` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `service`

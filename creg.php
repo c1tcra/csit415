@@ -1,6 +1,5 @@
 <?php
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Connection to the database
     $host = 'localhost';
     $dbname = 'swe2';
     $user = 'selman';
@@ -8,7 +7,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $dsn = "mysql:host=$host;dbname=$dbname";
     $pdo = new PDO($dsn, $user, $pass);
 
-    // Collecting and sanitizing user input
     $username = htmlspecialchars($_POST['user']);
     $password = $_POST['pass']; // Password will be hashed, no need to sanitize
     $firstName = htmlspecialchars($_POST['firstName']);
@@ -17,16 +15,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $phone = htmlspecialchars($_POST['phone']);
     $email = htmlspecialchars($_POST['email']);
 
-    // Check if username already exists
+    //username unique
     $stmt = $pdo->prepare("SELECT * FROM customer WHERE user = ?");
     $stmt->execute([$username]);
     if ($stmt->rowCount() > 0) {
         echo "<script>alert('Username already exists. Please choose a different username.');</script>";
     } else {
-        // Hashing the password
+        //hashing
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
-        // Inserting data into the database
+        
         $sql = "INSERT INTO customer (user, pass, firstName, lastName, address, phone, email) VALUES (?, ?, ?, ?, ?, ?, ?)";
         $stmt = $pdo->prepare($sql);
         $stmt->execute([$username, $hashedPassword, $firstName, $lastName, $address, $phone, $email]);

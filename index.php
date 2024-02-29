@@ -1,20 +1,19 @@
 <?php
-session_start(); // Starting session
+session_start();
 
-// Handling form submission
 if (isset($_POST['submit'])) {
-    // Database connection credentials
+    
     $host = 'localhost';
     $dbname = 'swe2';
     $user = 'selman';
     $pass = '123';
 
     try {
-        // Establishing PDO connection
+        //pdo
         $pdo = new PDO("mysql:host=$host;dbname=$dbname", $user, $pass);
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-        // Checking for admin
+        //admin check
         $stmt = $pdo->prepare("SELECT * FROM admin WHERE adminuser = :username");
         $stmt->execute(['username' => $_POST['username']]);
         if ($stmt->rowCount() > 0) {
@@ -25,7 +24,6 @@ if (isset($_POST['submit'])) {
             }
         }
 
-        // Checking for customer
         $stmt = $pdo->prepare("SELECT * FROM customer WHERE user = :username");
         $stmt->execute(['username' => $_POST['username']]);
         if ($stmt->rowCount() > 0) {
@@ -36,13 +34,12 @@ if (isset($_POST['submit'])) {
             }
         }
 
-        // If no match found
+        //case of no match
         echo "<script>alert('Invalid username or password.');</script>";
     } catch (PDOException $e) {
       die("Could not connect to the database $dbname :" . $e->getMessage());
     }
 
-    // Close the database connection
     $pdo = null;
 }
 ?>
