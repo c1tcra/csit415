@@ -1,4 +1,7 @@
 <!-- bugged and needs fixing -->
+<!-- 
+i am going to rewrite this entire page, no need for debugging
+i think there is something with the fetching or the sql that i couldnt get right -->
 <?php
 if (!isset($_GET['id'])) {
     die('Need to specify an ID');
@@ -26,7 +29,7 @@ try {
     }
 
     //sales
-    $salesStmt = $pdo->prepare("SELECT * FROM sales WHERE cid = :id");
+    $salesStmt = $pdo->prepare("SELECT * FROM sales WHERE sid = :id"); 
     $salesStmt->execute(['id' => $id]);
     $sales = $salesStmt->fetchAll(PDO::FETCH_ASSOC);
 
