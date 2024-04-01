@@ -1,33 +1,11 @@
 # csit415
 csit415 project 
 
-db using sql was created
-import db into phpadmin when changes are made 
-so changes are visible in localhost
+you can use any db localhost you want
+i personally use xampp and myphpadmin
 
-put php files in htdocs/project
-direct to that directory for php files
-when launching them on your browser
+there are some pips to install if you want to use mysql
 
-please use the same format and style as 
-i have made in styles.css.
-although simple, please use index.php as reference
+rest is done using flask in python
 
-index.php is our main page. 
-
-areg.php is "admin registry". this will remain
-private for us to use as of right now. instead of manually
-inputting this information I made a php for it. plus the PHP
-takes care of hashing and I have put a few security measures for 
-sql injection
-
-creg.php is "customer registry". this is also private to
-admins/devs. serves similar as areg. take a look at them and their 
-source code. 
-
-i think we should stick to dark theme websites.
-
-------
-2/29 push
-customerdetails is what admin panel will see. its not working to par as of yet
-so dont freak out. i dont have time for debugging at the moment.
+dont forget to create a venv
