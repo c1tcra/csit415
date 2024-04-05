@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 28, 2024 at 06:06 PM
+-- Generation Time: Apr 05, 2024 at 06:47 AM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.2.0
 
@@ -48,11 +48,18 @@ INSERT INTO `admin` (`adminuser`, `adminpass`, `adminname`) VALUES
 
 CREATE TABLE `car` (
   `id` int(11) NOT NULL,
-  `make` int(11) NOT NULL,
-  `model` int(11) NOT NULL,
+  `make` varchar(255) NOT NULL,
+  `model` varchar(255) NOT NULL,
   `year` int(11) NOT NULL,
   `cid` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `car`
+--
+
+INSERT INTO `car` (`id`, `make`, `model`, `year`, `cid`) VALUES
+(1, 'BMW', 'M340i', 2021, 1);
 
 -- --------------------------------------------------------
 
@@ -113,6 +120,13 @@ CREATE TABLE `service` (
   `sparkplugm` int(11) NOT NULL,
   `cid` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `service`
+--
+
+INSERT INTO `service` (`id`, `servicedby`, `oilchangem`, `tirero`, `sparkplugm`, `cid`) VALUES
+(1, 'Micah', 5000, 10000, 50000, 1);
 
 -- --------------------------------------------------------
 
@@ -180,13 +194,13 @@ ALTER TABLE `term`
 -- AUTO_INCREMENT for table `car`
 --
 ALTER TABLE `car`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `customer`
 --
 ALTER TABLE `customer`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `sales`
@@ -198,7 +212,7 @@ ALTER TABLE `sales`
 -- AUTO_INCREMENT for table `service`
 --
 ALTER TABLE `service`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `term`

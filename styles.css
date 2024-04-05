@@ -1,8 +1,8 @@
 body {
-  background-color: #121212; /* Dark background */
-  color: #ffffff; /* White text color */
+  background-color: #121212; 
+  color: #ffffff; 
   font-family: 'Arial', sans-serif;
-  margin: 0; /* Add this to remove default margin */
+  margin: 0; 
   display: flex;
   justify-content: center;
   align-items: center;
@@ -12,14 +12,14 @@ body {
 .container {
   max-width: 350px;
   padding: 20px;
-  background-color: #232323; /* Darker box background */
+  background-color: #232323; 
   border-radius: 5px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-  text-align: center; /* Center aligns the text and form */
+  text-align: center; 
 }
 
 h1 {
-  color: #4a90e2; /* Light blue color */
+  color: #4a90e2; 
   margin-bottom: 20px;
 }
 
@@ -29,8 +29,8 @@ input[type=text], input[type=password], input[type=email] {
   margin: 5px 0 22px 0;
   display: inline-block;
   border: none;
-  background: #333333; /* Slightly lighter input background */
-  color: white; /* White input text */
+  background: #333333; 
+  color: white; 
 }
 
 input[type=text]:focus, input[type=password]:focus, input[type=email]:focus {
@@ -39,7 +39,7 @@ input[type=text]:focus, input[type=password]:focus, input[type=email]:focus {
 }
 
 button {
-  background-color: #4a90e2; /* Light blue button background */
+  background-color: #4a90e2; 
   color: white;
   padding: 14px 20px;
   margin: 8px 0;
@@ -80,4 +80,29 @@ input[type=submit] {
 
 input[type=submit]:hover {
   background-color: #0056b3;
+}
+
+.details-section {
+  margin-bottom: 30px; 
+}
+
+table {
+  width: 80%; 
+  margin: 0 auto; 
+  border-collapse: separate;
+  border-spacing: 0 10px; 
+}
+
+th, td {
+  padding: 15px; 
+  border: 1px solid #333; 
+  background-color: #232323; 
+  color: #fff; 
+  text-align: center; 
+}
+
+th {
+  padding: 20px; 
+  font-size: 1.1em; 
+  background-color: #121212; 
 }

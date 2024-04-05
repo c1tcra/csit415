@@ -1,67 +1,37 @@
-<!-- bugged and needs fixing -->
 <?php
-if (!isset($_GET['id'])) {
-    die('Need to specify an ID');
-}
+include('dbconfig.php');
 
-$id = $_GET['id'];
+$customerId = isset($_GET['id']) ? (int)$_GET['id'] : 0;
+$customerDetails = [];
+$carDetails = [];
+$salesDetails = [];
 
-$host = 'localhost';
-$dbname = 'swe2';
-$user = 'selman';
-$pass = '123';
-$dsn = "mysql:host=$host;dbname=$dbname";
-$pdo = new PDO($dsn, $user, $pass);
-
-try {
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-    //customer
-    $stmt = $pdo->prepare("SELECT * FROM customer WHERE id = :id");
-    $stmt->execute(['id' => $id]);
-    $customer = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    if (!$customer) {
-        die('Customer not found');
-    }
-
-    //sales
-    $salesStmt = $pdo->prepare("SELECT * FROM sales WHERE sid = :id");
-    $salesStmt->execute(['id' => $id]);
-    $sales = $salesStmt->fetchAll(PDO::FETCH_ASSOC);
-//car 8 sales
-    $cars = [];
-    foreach ($sales as $sale) {
-    //car in sale
-    if (isset($sale['carId'])) {
-        $carStmt = $pdo->prepare("SELECT * FROM car WHERE id = :carId");
-        if ($carStmt->execute(['carId' => $sale['carId']])) {
-            $car = $carStmt->fetch(PDO::FETCH_ASSOC);
-            if ($car) {
-                $cars[] = $car;
-            }
+if($customerId > 0) {
+    try {
+        //customer
+        $stmt = $pdo->prepare("SELECT * FROM customer WHERE id = ?");
+        $stmt->execute([$customerId]);
+        $customerDetails = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        //car information about the customer
+        $stmt = $pdo->prepare("SELECT * FROM car WHERE cid = ?");
+        $stmt->execute([$customerId]);
+        $carDetails = $stmt->fetchAll(PDO::FETCH_ASSOC); //more than 1 car associated with customer
+        
+        //get sales details associated with customer
+        if ($customerDetails && $customerDetails['sid']) {
+            $stmt = $pdo->prepare("SELECT * FROM sales WHERE id = ?");
+            $stmt->execute([$customerDetails['sid']]);
+            $salesDetails = $stmt->fetch(PDO::FETCH_ASSOC);
         }
+        
+    } catch (PDOException $e) {
+        die("Could not connect to the database $dbname :" . $e->getMessage());
     }
+} else {
+    echo "Invalid Customer ID";
+    exit;
 }
-
-    //fetching services information
-    $services = [];
-    $serviceStmt = $pdo->prepare("SELECT * FROM service WHERE cid = :id"); 
-    $serviceStmt->execute(['id' => $id]);
-    $services = $serviceStmt->fetchAll(PDO::FETCH_ASSOC);
-
-    //fetching terms information
-    $terms = [];
-    $termStmt = $pdo->prepare("SELECT * FROM term WHERE cid = :id"); 
-    $termStmt->execute(['id' => $id]);
-    $terms = $termStmt->fetchAll(PDO::FETCH_ASSOC);
-
-
-} catch (PDOException $e) {
-    die("Could not connect to the database $dbname :" . $e->getMessage());
-}
-
-
 ?>
 
 <!DOCTYPE html>
@@ -72,31 +42,71 @@ try {
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h2>Customer Details</h2>
-    <p>Name: <?= htmlspecialchars($customer['firstName'] . ' ' . $customer['lastName']) ?></p>
-    <h3>Sales</h3>
-    <ul>
-        <?php foreach ($sales as $sale): ?>
-            <li>Sale ID: <?= htmlspecialchars($sale['id']) ?>, Amount: <?= htmlspecialchars($sale['amount']) ?></li>
-        <?php endforeach; ?>
-    </ul>
-    <h3>Cars</h3>
-    <ul>
-        <?php foreach ($cars as $car): ?>
-            <li>Make: <?= htmlspecialchars($car['make']) ?>, Model: <?= htmlspecialchars($car['model']) ?></li>
-        <?php endforeach; ?>
-    </ul>
-    <h3>Services</h3>
-    <ul>
-        <?php foreach ($services as $service): ?>
-            <li><?= htmlspecialchars($service['name']) ?>: <?= htmlspecialchars($service['description']) ?></li>
-        <?php endforeach; ?>
-    </ul>
-    <h3>Terms</h3>
-    <ul>
-        <?php foreach ($terms as $term): ?>
-            <li><?= htmlspecialchars($term['description']) ?></li>
-        <?php endforeach; ?>
-    </ul>
+    <div class="centered-form">
+        <div class="form-container" style="width: auto;">
+            <h2>Customer Details</h2>
+            <div class="details-section">
+            <?php if (!empty($customerDetails)): ?>
+                <table>
+                    <tr>
+                        <th>Name</th>
+                        <th>Address</th>
+                        <th>Phone</th>
+                        <th>Email</th>
+                    </tr>
+                    <tr>
+                        <td><?= htmlspecialchars($customerDetails['firstName'] . ' ' . $customerDetails['lastName']) ?></td>
+                        <td><?= htmlspecialchars($customerDetails['address']) ?></td>
+                        <td><?= htmlspecialchars($customerDetails['phone']) ?></td>
+                        <td><?= htmlspecialchars($customerDetails['email']) ?></td>
+                    </tr>
+                </table>
+            </div>
+
+            <h3>Car Details</h3>
+            <div class="details-section">
+                <table>
+                <tr>
+                    <th>Make</th>
+                    <th>Model</th>
+                    <th>Year</th>
+                </tr>
+                <?php foreach ($carDetails as $car): ?>
+                <tr>
+                    <td><?= htmlspecialchars($car['make']) ?></td>
+                    <td><?= htmlspecialchars($car['model']) ?></td>
+                    <td><?= htmlspecialchars($car['year']) ?></td>
+                </tr>
+                <?php endforeach; ?>
+                </table>
+            </div>
+
+            <h3>Salesperson Details</h3>
+            <div class="details-section">
+                <table>
+                    <tr>
+                        <th>Name</th>
+                        <th>Position</th>
+                        <th>Total Cars Sold</th>
+                    </tr>
+                    <?php if (!empty($salesDetails)): ?>
+                    <tr>
+                        <td><?= htmlspecialchars($salesDetails['salesname']) ?></td>
+                        <td><?= htmlspecialchars($salesDetails['position']) ?></td>
+                        <td><?= htmlspecialchars($salesDetails['totalCarSold']) ?></td>
+                    </tr>
+                    <?php else: ?>
+                    <tr>
+                        <td colspan="3">No salesperson details found.</td>
+                    </tr>
+                <?php endif; ?>
+                </table>
+        <?php else: ?>
+            <p>Customer details not found.</p>
+        <?php endif; ?>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
+
